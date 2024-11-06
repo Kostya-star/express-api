@@ -42,8 +42,19 @@ const updateVideo = (videoId: string, payload: VideoPutPayload): IVideo => {
   return videoToUpdate;
 };
 
+const deleteVideo = (videoId: string) => {
+  const videoToDelete = mockDB.videos.find((video) => video.id === +videoId);
+
+  if (!videoToDelete) {
+    throw new Error(`Video with ID ${videoId} does not exist.`);
+  }
+
+  mockDB.videos = mockDB.videos.filter(video => video.id !== videoToDelete.id) 
+};
+
 export default {
   getVideos,
   createVideo,
   updateVideo,
+  deleteVideo,
 };

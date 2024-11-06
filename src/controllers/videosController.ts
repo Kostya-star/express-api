@@ -2,7 +2,6 @@ import { VideoPostPayload } from '@/types/video-post-payload';
 import { postVideoValidator } from '@/validators/video/post-video-validator';
 import { Request, Response } from 'express';
 import VideoService from '@/services/video-service';
-import { IVideo } from '@/types/video';
 import { VideoPutPayload } from '@/types/video-put-payload';
 import { putVideoValidator } from '@/validators/video/put-video-validator';
 
@@ -10,14 +9,14 @@ const getVideosController = (req: Request, res: Response) => {
   try {
     const videos = VideoService.getVideos();
 
-    res.status(200).json({ videos });
-  } catch (err) {
+    res.status(200).json(videos);
+  } catch (err: any) {
     console.error(err);
-    res.status(500).json('Something went wrong...');
+    res.status(500).json(err.message);
   }
 };
 
-const createVideoController = (req: Request<any, any, Partial<VideoPostPayload>, any>, res: Response<any>) => {
+const createVideoController = (req: Request<void, void, Partial<VideoPostPayload>, void>, res: Response) => {
   try {
     const { title, author, availableResolutions } = req.body;
 
@@ -33,14 +32,14 @@ const createVideoController = (req: Request<any, any, Partial<VideoPostPayload>,
 
     const video = VideoService.createVideo(newVideo as VideoPostPayload);
 
-    res.status(201).json({ video });
-  } catch (err) {
+    res.status(201).json(video);
+  } catch (err: any) {
     console.error(err);
-    res.status(500).json('Something went wrong...');
+    res.status(500).json(err.message);
   }
 };
 
-const updateVideoController = (req: Request<{ id: string }, any, Partial<VideoPutPayload>, any>, res: Response<any>) => {
+const updateVideoController = (req: Request<{ id: string }, void, Partial<VideoPutPayload>, void>, res: Response) => {
   try {
     const videoId = req.params.id;
     const payload = req.body;
@@ -55,15 +54,28 @@ const updateVideoController = (req: Request<{ id: string }, any, Partial<VideoPu
 
     const video = VideoService.updateVideo(videoId, payload as VideoPutPayload);
 
-    res.status(201).json({ video });
-  } catch (err) {
+    res.status(201).json(video);
+  } catch (err: any) {
     console.error(err);
-    res.status(500).json('Something went wrong...');
+    res.status(500).json(err.message);
   }
 };
 
+const deleteVideoController = (req: Request<{ id: string }, void, void, void>, res: Response) => {
+  try {
+    const videoId = req.params.id;
+
+    const video = VideoService.deleteVideo(videoId);
+
+    res.status(200).json({ video });
+  } catch (err: any) {
+    console.error(err);
+    res.status(500).json(err.message);
+  }
+};
 export default {
   getVideosController,
   createVideoController,
   updateVideoController,
+  deleteVideoController,
 };
