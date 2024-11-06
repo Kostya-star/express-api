@@ -1,7 +1,10 @@
-import { VideoPostType } from '@/types/video-post';
-import { videoPostValidator } from '@/validators/video-post-validator';
+import { VideoPostPayload } from '@/types/video-post-payload';
+import { postVideoValidator } from '@/validators/video/post-video-validator';
 import { Request, Response } from 'express';
 import VideoService from '@/services/video-service';
+import { IVideo } from '@/types/video';
+import { VideoPutPayload } from '@/types/video-put-payload';
+import { putVideoValidator } from '@/validators/video/put-video-validator';
 
 const getVideosController = (req: Request, res: Response) => {
   try {
@@ -14,13 +17,13 @@ const getVideosController = (req: Request, res: Response) => {
   }
 };
 
-const createVideoController = (req: Request<any, any, VideoPostType, any>, res: Response<any>) => {
+const createVideoController = (req: Request<any, any, Partial<VideoPostPayload>, any>, res: Response<any>) => {
   try {
     const { title, author, availableResolutions } = req.body;
 
     const newVideo = { title, author, availableResolutions };
 
-    const { errorsMessages } = videoPostValidator(newVideo);
+    const { errorsMessages } = postVideoValidator(newVideo);
 
     if (errorsMessages.length) {
       console.error({ errorsMessages });
@@ -28,7 +31,29 @@ const createVideoController = (req: Request<any, any, VideoPostType, any>, res: 
       return;
     }
 
-    const video = VideoService.createVideo(newVideo);
+    const video = VideoService.createVideo(newVideo as VideoPostPayload);
+
+    res.status(201).json({ video });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json('Something went wrong...');
+  }
+};
+
+const updateVideoController = (req: Request<{ id: string }, any, Partial<VideoPutPayload>, any>, res: Response<any>) => {
+  try {
+    const videoId = req.params.id;
+    const payload = req.body;
+
+    const { errorsMessages } = putVideoValidator(payload);
+
+    if (errorsMessages.length) {
+      console.error({ errorsMessages });
+      res.status(400).json({ errorsMessages });
+      return;
+    }
+
+    const video = VideoService.updateVideo(videoId, payload as VideoPutPayload);
 
     res.status(201).json({ video });
   } catch (err) {
@@ -40,4 +65,5 @@ const createVideoController = (req: Request<any, any, VideoPostType, any>, res: 
 export default {
   getVideosController,
   createVideoController,
+  updateVideoController,
 };

@@ -3,7 +3,8 @@ import videosController from '@/controllers/videosController'
 
 const router = Router()
 
-router.post('/', videosController.createVideoController);
 router.get('', videosController.getVideosController);
+router.post('', videosController.createVideoController);
+router.put('/:id', videosController.updateVideoController);
 
 export default router

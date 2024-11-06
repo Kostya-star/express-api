@@ -1,12 +1,13 @@
 import { mockDB } from '@/mockDB';
 import { IVideo } from '@/types/video';
-import { VideoPostType } from '@/types/video-post';
+import { VideoPostPayload } from '@/types/video-post-payload';
+import { VideoPutPayload } from '@/types/video-put-payload';
 
 const getVideos = (): IVideo[] => {
   return mockDB.videos;
 };
 
-const createVideo = (newVideo: VideoPostType): IVideo => {
+const createVideo = (newVideo: VideoPostPayload): IVideo => {
   const createdAt = new Date();
   const publicationDate = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000).toISOString(); // Add 1 day
 
@@ -24,7 +25,25 @@ const createVideo = (newVideo: VideoPostType): IVideo => {
   return video;
 };
 
+const updateVideo = (videoId: string, payload: VideoPutPayload): IVideo => {
+  const videoToUpdate = mockDB.videos.find((video) => video.id === +videoId);
+
+  if (!videoToUpdate) {
+    throw new Error(`Video with ID ${videoId} does not exist.`);
+  }
+
+  videoToUpdate.title = payload.title;
+  videoToUpdate.author = payload.author;
+  videoToUpdate.availableResolutions = payload.availableResolutions;
+  videoToUpdate.canBeDownloaded = payload.canBeDownloaded;
+  videoToUpdate.minAgeRestriction = payload.minAgeRestriction;
+  videoToUpdate.publicationDate = payload.publicationDate;
+
+  return videoToUpdate;
+};
+
 export default {
   getVideos,
   createVideo,
+  updateVideo,
 };

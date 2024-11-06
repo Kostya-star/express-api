@@ -1,5 +1,5 @@
 import { IVideo } from '@/types/video';
-import { VideoPostType } from '@/types/video-post';
+import { VideoPostPayload } from '@/types/video-post-payload';
 
 interface DataBase {
   videos: IVideo[];
@@ -15,7 +15,7 @@ export const mockDB: DataBase = {
       id: 22,
       minAgeRestriction: null,
       publicationDate: '3434',
-      title: '222'
+      title: '222',
     },
   ],
 };

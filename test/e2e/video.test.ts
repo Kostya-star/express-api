@@ -2,8 +2,8 @@ import { req } from './helper';
 // import {setDB} from '../src/db/db'
 // import {dataset1} from './datasets'
 import { VIDEOS_ROUTES } from '../../src/const/routes';
-import { videoPostErrorsList } from '../../src/const/video-post-errors-list';
-import type { VideoPostType } from '../../src/types/video-post';
+import { videoErrorsMessages } from '../../src/const/video-errors-messages';
+import type { VideoPostPayload } from '../../src/types/video-post-payload';
 import type { IVideo } from '../../src/types/video';
 
 const testVideo: IVideo = {
@@ -60,62 +60,52 @@ describe('VIDEOS', () => {
         'with missing title',
         // @ts-ignore
         { ...testVideo, title: undefined },
-        videoPostErrorsList.noTitle,
+        videoErrorsMessages.noTitle,
         'title'
       );
       checkPostValidation(
         'with wrong title type',
         // @ts-ignore
         { ...testVideo, title: 1234 },
-        videoPostErrorsList.titleWrongFormat,
+        videoErrorsMessages.titleWrongFormat,
         'title'
       );
-      checkPostValidation(
-        'with exceeded title length',
-        { ...testVideo, title: 'a'.repeat(50) },
-        videoPostErrorsList.titleLength,
-        'title'
-      );
+      checkPostValidation('with exceeded title length', { ...testVideo, title: 'a'.repeat(50) }, videoErrorsMessages.titleLength, 'title');
 
       checkPostValidation(
         'with missing author',
         // @ts-ignore
         { ...testVideo, author: undefined },
-        videoPostErrorsList.noAuthor,
+        videoErrorsMessages.noAuthor,
         'author'
       );
       checkPostValidation(
         'with wrong author type',
         // @ts-ignore
         { ...testVideo, author: 12345 },
-        videoPostErrorsList.authorWrongFormat,
+        videoErrorsMessages.authorWrongFormat,
         'author'
       );
-      checkPostValidation(
-        'with exceeded author length',
-        { ...testVideo, author: 'a'.repeat(30) },
-        videoPostErrorsList.authorLength,
-        'author'
-      );
-      
+      checkPostValidation('with exceeded author length', { ...testVideo, author: 'a'.repeat(30) }, videoErrorsMessages.authorLength, 'author');
+
       checkPostValidation(
         'with missing availableResolutions',
         // @ts-ignore
         { ...testVideo, availableResolutions: undefined },
-        videoPostErrorsList.noResolution,
+        videoErrorsMessages.noResolution,
         'availableResolutions'
       );
       checkPostValidation(
         'with wrong availableResolutions type',
         // @ts-ignore
         { ...testVideo, availableResolutions: 1234 },
-        videoPostErrorsList.resolutionWrongFormat,
+        videoErrorsMessages.resolutionWrongFormat,
         'availableResolutions'
       );
       checkPostValidation(
         'with wrong availableResolutions length',
         { ...testVideo, availableResolutions: [] },
-        videoPostErrorsList.resolutionLength,
+        videoErrorsMessages.resolutionLength,
         'availableResolutions'
       );
     });
@@ -123,12 +113,9 @@ describe('VIDEOS', () => {
     it('default values for unspecified fields', async () => {
       const { title, author, availableResolutions } = testVideo;
       const postTestVideo = { title, author, availableResolutions };
-    
-      const res = await req
-        .post(VIDEOS_ROUTES.main)
-        .send(postTestVideo)
-        .expect('Content-Type', /json/);
-    
+
+      const res = await req.post(VIDEOS_ROUTES.main).send(postTestVideo).expect('Content-Type', /json/);
+
       expect(res.status).toBe(201);
       expect(res.body.video.canBeDownloaded).toBe(false);
       expect(res.body.video.minAgeRestriction).toBe(null);
@@ -138,8 +125,8 @@ describe('VIDEOS', () => {
 
 async function checkPostValidation(
   suiteName: string,
-  video: VideoPostType,
-  errorMessage: typeof videoPostErrorsList[keyof typeof videoPostErrorsList],
+  video: VideoPostPayload,
+  errorMessage: (typeof videoErrorsMessages)[keyof typeof videoErrorsMessages],
   field: 'title' | 'author' | 'availableResolutions'
 ) {
   it(suiteName, async () => {

@@ -10,5 +10,5 @@ export interface IVideo {
   minAgeRestriction: number | null;
   createdAt: string;
   publicationDate: string;
-  availableResolutions: AvailableResolutionsType[] | null;
+  availableResolutions: AvailableResolutionsType[];
 }
