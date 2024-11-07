@@ -1,12 +1,14 @@
 import { VIDEOS_ROUTES } from '../../src/const/routes';
-import { videoErrorsMessages } from '../../src/const/video-errors-messages';
 import { IVideo } from '../../src/types/video';
 import { req } from './helper';
+import { VIDEO_VALIDATION_ERRORS } from '../../src/types/video-validation-errors'
+import { AVAILABLE_RESOLUTIONS } from '../../src/types/video-resolutions';
+import { HTTP_STATUS_CODES } from '../../src/types/http-status-codes';
 
 export const mainRequestUrl = VIDEOS_ROUTES.main;
 export const testVideo: IVideo = {
   author: 'Author',
-  availableResolutions: ['P360'],
+  availableResolutions: [AVAILABLE_RESOLUTIONS.P360],
   canBeDownloaded: true,
   createdAt: '2011-10-05T14:48:00.100Z',
   id: 22,
@@ -18,7 +20,7 @@ export const testVideo: IVideo = {
 export async function checkVideoValidation(
   suiteName: string,
   video: any,
-  errorMessage: (typeof videoErrorsMessages)[keyof typeof videoErrorsMessages],
+  errorMessage: VIDEO_VALIDATION_ERRORS,
   field: keyof IVideo,
   reqType: 'post' | 'put',
   url: string
@@ -26,7 +28,7 @@ export async function checkVideoValidation(
   it(suiteName, async () => {
     const res = await req[reqType](url).send(video);
 
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(HTTP_STATUS_CODES.BAD_REQUEST_400);
     expect(res.body.errorsMessages).toContainEqual({
       message: errorMessage,
       field,

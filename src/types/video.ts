@@ -1,6 +1,4 @@
-import { AvailableResolutions } from '@/const/video';
-
-export type AvailableResolutionsType = (typeof AvailableResolutions)[number];
+import { AVAILABLE_RESOLUTIONS } from './video-resolutions';
 
 export interface IVideo {
   id: number;
@@ -10,5 +8,5 @@ export interface IVideo {
   minAgeRestriction: number | null;
   createdAt: string;
   publicationDate: string;
-  availableResolutions: AvailableResolutionsType[];
+  availableResolutions: AVAILABLE_RESOLUTIONS[];
 }

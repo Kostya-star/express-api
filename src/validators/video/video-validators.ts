@@ -1,6 +1,7 @@
-import { AvailableResolutions, MAX_AGE_RESTRICTION, MIN_AGE_RESTRICTION, VIDEO_AUTHOR_LENGTH, VIDEO_TITLE_LENGTH } from '@/const/video';
-import { videoErrorsMessages } from '@/const/video-errors-messages';
-import type { AvailableResolutionsType, IVideo } from '@/types/video';
+import { availableResolutions, MAX_AGE_RESTRICTION, MIN_AGE_RESTRICTION, VIDEO_AUTHOR_LENGTH, VIDEO_TITLE_LENGTH } from '@/const/video';
+import type { IVideo } from '@/types/video';
+import { AVAILABLE_RESOLUTIONS } from '@/types/video-resolutions';
+import { VIDEO_VALIDATION_ERRORS } from '@/types/video-validation-errors';
 import { isIsoDate } from '@/util/isIsoDate';
 
 interface ErrorItem {
@@ -8,67 +9,65 @@ interface ErrorItem {
   field: keyof IVideo;
 }
 
-interface Errors {
+interface ErrorsMessages {
   errorsMessages: ErrorItem[];
 }
 
-type ErrorMessages = (typeof videoErrorsMessages)[keyof typeof videoErrorsMessages];
-
-export function validateTitle(title: string | undefined, errors: Errors) {
+export function validateTitle(title: string | undefined, errors: ErrorsMessages) {
   if (!title) {
-    pushError('title', videoErrorsMessages.noTitle, errors);
+    pushError('title', VIDEO_VALIDATION_ERRORS.NO_TITLE, errors);
   } else if (typeof title !== 'string') {
-    pushError('title', videoErrorsMessages.titleWrongFormat, errors);
+    pushError('title', VIDEO_VALIDATION_ERRORS.TITLE_WRONG_FORMAT, errors);
   } else if (!title.trim()) {
-    pushError('title', videoErrorsMessages.noTitle, errors);
+    pushError('title', VIDEO_VALIDATION_ERRORS.NO_TITLE, errors);
   } else if (title.length > VIDEO_TITLE_LENGTH) {
-    pushError('title', videoErrorsMessages.titleLength, errors);
+    pushError('title', VIDEO_VALIDATION_ERRORS.TITLE_LENGTH, errors);
   }
 }
 
-export function validateAuthor(author: string | undefined, errors: Errors) {
+export function validateAuthor(author: string | undefined, errors: ErrorsMessages) {
   if (!author) {
-    pushError('author', videoErrorsMessages.noAuthor, errors);
+    pushError('author', VIDEO_VALIDATION_ERRORS.NO_AUTHOR, errors);
   } else if (typeof author !== 'string') {
-    pushError('author', videoErrorsMessages.authorWrongFormat, errors);
+    pushError('author', VIDEO_VALIDATION_ERRORS.AUTHOR_WRONG_FORMAT, errors);
   } else if (!author.trim()) {
-    pushError('author', videoErrorsMessages.noAuthor, errors);
+    pushError('author', VIDEO_VALIDATION_ERRORS.NO_AUTHOR, errors);
   } else if (author.length > VIDEO_AUTHOR_LENGTH) {
-    pushError('author', videoErrorsMessages.authorLength, errors);
+    pushError('author', VIDEO_VALIDATION_ERRORS.AUTHOR_LENGTH, errors);
   }
 }
 
-export function validateResolutions(resolutions: AvailableResolutionsType[] | undefined, errors: Errors) {
+export function validateResolutions(resolutions: AVAILABLE_RESOLUTIONS[] | undefined, errors: ErrorsMessages) {
   if (!resolutions) {
-    pushError('availableResolutions', videoErrorsMessages.noResolution, errors);
+    pushError('availableResolutions', VIDEO_VALIDATION_ERRORS.NO_RESOLUTION, errors);
   } else if (!Array.isArray(resolutions)) {
-    pushError('availableResolutions', videoErrorsMessages.resolutionWrongFormat, errors);
-  } else if (!AvailableResolutions.filter((r) => resolutions.some((res) => res === r)).length) {
-    pushError('availableResolutions', videoErrorsMessages.resolutionLength, errors);
+    pushError('availableResolutions', VIDEO_VALIDATION_ERRORS.RESOLUTION_WRONG_FORMAT, errors);
+  } else if (!availableResolutions.filter((r) => resolutions.some((res) => res === r)).length) {
+    pushError('availableResolutions', VIDEO_VALIDATION_ERRORS.RESOLUTION_LENGTH, errors);
   }
 }
-export function validateCanBeDownloaded(canBeDownloaded: boolean | undefined, errors: Errors) {
+export function validateCanBeDownloaded(canBeDownloaded: boolean | undefined, errors: ErrorsMessages) {
   if (typeof canBeDownloaded !== 'boolean') {
-    pushError('canBeDownloaded', videoErrorsMessages.canBeDownloadedWrongFormat, errors);
+    pushError('canBeDownloaded', VIDEO_VALIDATION_ERRORS.CAN_BE_DOWNLOADED_WRONG_FORMAT, errors);
   }
 }
 
-export function validateAge(age: number | undefined | null, errors: Errors) {
+export function validateAge(age: number | undefined | null, errors: ErrorsMessages) {
   if (typeof age !== 'number' && age !== null) {
-    pushError('minAgeRestriction', videoErrorsMessages.ageWrongFormat, errors);
+    pushError('minAgeRestriction', VIDEO_VALIDATION_ERRORS.AGE_WRONG_FORMAT, errors);
   } else if (typeof age === 'number' && (age < MIN_AGE_RESTRICTION || age > MAX_AGE_RESTRICTION)) {
-    pushError('minAgeRestriction', videoErrorsMessages.ageNotAllowed, errors);
+    pushError('minAgeRestriction', VIDEO_VALIDATION_ERRORS.AGE_NOT_ALLOWED, errors);
   }
 }
 
-export function validatePublicationDate(date: string | undefined, errors: Errors) {
+export function validatePublicationDate(date: string | undefined, errors: ErrorsMessages) {
   if (!date || !isIsoDate(date)) {
-    pushError('publicationDate', videoErrorsMessages.publicationDateWrongFormat, errors);
+    pushError('publicationDate', VIDEO_VALIDATION_ERRORS.PUBLICATION_DATE_WRONG_FORMAT, errors);
   }
 }
 
-export const validateVideoFields = (fields: Partial<IVideo>, fieldsToValidate: Readonly<(keyof IVideo)[]>): Errors => {
-  const errors: Errors = {
+export const validateVideoFields = (fields: Partial<IVideo>, fieldsToValidate: Readonly<(keyof IVideo)[]>): ErrorsMessages => {
+  const errors: ErrorsMessages = {
     errorsMessages: [],
   };
 
@@ -101,6 +100,6 @@ export const validateVideoFields = (fields: Partial<IVideo>, fieldsToValidate: R
   return errors;
 };
 
-function pushError(field: keyof IVideo, message: ErrorMessages, errors: Errors) {
+function pushError(field: keyof IVideo, message: VIDEO_VALIDATION_ERRORS, errors: ErrorsMessages) {
   errors.errorsMessages.push({ field, message });
 }

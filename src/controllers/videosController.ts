@@ -4,30 +4,30 @@ import { NextFunction, Request, Response } from 'express';
 import VideoService from '@/services/video-service';
 import { VideoPutPayload } from '@/types/video-put-payload';
 import { putVideoValidator } from '@/validators/video/put-video-validator';
+import { HTTP_STATUS_CODES } from '@/types/http-status-codes';
 
-const getVideosController = (req: Request, res: Response) => {
+const getVideosController = (req: Request, res: Response, next: NextFunction) => {
   try {
     const videos = VideoService.getVideos();
 
-    res.status(200).json(videos);
-  } catch (err: any) {
-    console.error(err);
-    res.status(500).json(err.message);
-  }
-};
-
-const getVideoByIdController = async (req: Request<{ id: string }, void, void, void>, res: Response, next: NextFunction) => {
-  try {
-    const videoId = req.params.id;
-    const video = await VideoService.getVideoById(videoId);
-
-    res.status(200).json(video);
+    res.status(HTTP_STATUS_CODES.SUCCESS_200).json(videos);
   } catch (err: any) {
     next(err)
   }
 };
 
-const createVideoController = (req: Request<void, void, Partial<VideoPostPayload>, void>, res: Response) => {
+const getVideoByIdController = (req: Request<{ id: string }, void, void, void>, res: Response, next: NextFunction) => {
+  try {
+    const videoId = req.params.id;
+    const video = VideoService.getVideoById(videoId);
+
+    res.status(HTTP_STATUS_CODES.SUCCESS_200).json(video);
+  } catch (err: any) {
+    next(err)
+  }
+};
+
+const createVideoController = (req: Request<void, void, Partial<VideoPostPayload>, void>, res: Response, next: NextFunction) => {
   try {
     const { title, author, availableResolutions } = req.body;
 
@@ -37,20 +37,19 @@ const createVideoController = (req: Request<void, void, Partial<VideoPostPayload
 
     if (errorsMessages.length) {
       console.error({ errorsMessages });
-      res.status(400).json({ errorsMessages });
+      res.status(HTTP_STATUS_CODES.BAD_REQUEST_400).json({ errorsMessages });
       return;
     }
 
     const video = VideoService.createVideo(newVideo as VideoPostPayload);
 
-    res.status(201).json(video);
+    res.status(HTTP_STATUS_CODES.SUCCESS_201).json(video);
   } catch (err: any) {
-    console.error(err);
-    res.status(500).json(err.message);
+    next(err)
   }
 };
 
-const updateVideoController = (req: Request<{ id: string }, void, Partial<VideoPutPayload>, void>, res: Response) => {
+const updateVideoController = (req: Request<{ id: string }, void, Partial<VideoPutPayload>, void>, res: Response, next: NextFunction) => {
   try {
     const videoId = req.params.id;
     const payload = req.body;
@@ -59,29 +58,27 @@ const updateVideoController = (req: Request<{ id: string }, void, Partial<VideoP
 
     if (errorsMessages.length) {
       console.error({ errorsMessages });
-      res.status(400).json({ errorsMessages });
+      res.status(HTTP_STATUS_CODES.BAD_REQUEST_400).json({ errorsMessages });
       return;
     }
 
-    const video = VideoService.updateVideo(videoId, payload as VideoPutPayload);
+    VideoService.updateVideo(videoId, payload as VideoPutPayload);
 
-    res.status(201).json(video);
+    res.status(HTTP_STATUS_CODES.NO_CONTENT_204).end() 
   } catch (err: any) {
-    console.error(err);
-    res.status(500).json(err.message);
+    next(err)
   }
 };
 
-const deleteVideoController = (req: Request<{ id: string }, void, void, void>, res: Response) => {
+const deleteVideoController = (req: Request<{ id: string }, void, void, void>, res: Response, next: NextFunction) => {
   try {
     const videoId = req.params.id;
 
-    const video = VideoService.deleteVideo(videoId);
+    VideoService.deleteVideo(videoId);
 
-    res.status(200).json({ video });
+    res.status(HTTP_STATUS_CODES.NO_CONTENT_204).end()
   } catch (err: any) {
-    console.error(err);
-    res.status(500).json(err.message);
+    next(err)
   }
 };
 export default {

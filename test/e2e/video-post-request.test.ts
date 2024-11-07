@@ -1,15 +1,16 @@
-import { videoErrorsMessages } from '../../src/const/video-errors-messages';
+import { HTTP_STATUS_CODES } from '../../src/types/http-status-codes';
+import {VIDEO_VALIDATION_ERRORS} from '../../src/types/video-validation-errors';
 import { checkVideoValidation, mainRequestUrl, testVideo } from './common';
 import { req } from './helper';
 
-describe('POST request', () => {
+describe('VIDEO POST request', () => {
   it('status check and header', async () => {
     const { title, author, availableResolutions } = testVideo;
     const postTestVideo = { title, author, availableResolutions };
 
     const res = await req.post(mainRequestUrl).send(postTestVideo).expect('Content-Type', /json/);
 
-    expect(res.status).toBe(201);
+    expect(res.status).toBe(HTTP_STATUS_CODES.SUCCESS_201);
   });
   it('returns correct response structure', async () => {
     const { title, author, availableResolutions } = testVideo;
@@ -20,12 +21,12 @@ describe('POST request', () => {
     expect(res.body).toMatchObject(postTestVideo);
   });
 
-  describe('POST Validation', () => {
+  describe('VIDEO POST Validation', () => {
     checkVideoValidation(
       'with missing title',
       // @ts-ignore
       { ...testVideo, title: undefined },
-      videoErrorsMessages.noTitle,
+      VIDEO_VALIDATION_ERRORS.NO_TITLE,
       'title',
       'post',
       mainRequestUrl
@@ -34,7 +35,7 @@ describe('POST request', () => {
       'with wrong title type',
       // @ts-ignore
       { ...testVideo, title: 1234 },
-      videoErrorsMessages.titleWrongFormat,
+      VIDEO_VALIDATION_ERRORS.TITLE_WRONG_FORMAT,
       'title',
       'post',
       mainRequestUrl
@@ -42,7 +43,7 @@ describe('POST request', () => {
     checkVideoValidation(
       'with exceeded title length',
       { ...testVideo, title: 'a'.repeat(50) },
-      videoErrorsMessages.titleLength,
+      VIDEO_VALIDATION_ERRORS.TITLE_LENGTH,
       'title',
       'post',
       mainRequestUrl
@@ -52,7 +53,7 @@ describe('POST request', () => {
       'with missing author',
       // @ts-ignore
       { ...testVideo, author: undefined },
-      videoErrorsMessages.noAuthor,
+      VIDEO_VALIDATION_ERRORS.NO_AUTHOR,
       'author',
       'post',
       mainRequestUrl
@@ -61,7 +62,7 @@ describe('POST request', () => {
       'with wrong author type',
       // @ts-ignore
       { ...testVideo, author: 12345 },
-      videoErrorsMessages.authorWrongFormat,
+      VIDEO_VALIDATION_ERRORS.AUTHOR_WRONG_FORMAT,
       'author',
       'post',
       mainRequestUrl
@@ -69,7 +70,7 @@ describe('POST request', () => {
     checkVideoValidation(
       'with exceeded author length',
       { ...testVideo, author: 'a'.repeat(30) },
-      videoErrorsMessages.authorLength,
+      VIDEO_VALIDATION_ERRORS.AUTHOR_LENGTH,
       'author',
       'post',
       mainRequestUrl
@@ -78,7 +79,7 @@ describe('POST request', () => {
       'with missing availableResolutions',
       // @ts-ignore
       { ...testVideo, availableResolutions: undefined },
-      videoErrorsMessages.noResolution,
+      VIDEO_VALIDATION_ERRORS.NO_RESOLUTION,
       'availableResolutions',
       'post',
       mainRequestUrl
@@ -87,7 +88,7 @@ describe('POST request', () => {
       'with wrong availableResolutions type',
       // @ts-ignore
       { ...testVideo, availableResolutions: 1234 },
-      videoErrorsMessages.resolutionWrongFormat,
+      VIDEO_VALIDATION_ERRORS.RESOLUTION_WRONG_FORMAT,
       'availableResolutions',
       'post',
       mainRequestUrl
@@ -95,7 +96,7 @@ describe('POST request', () => {
     checkVideoValidation(
       'with wrong availableResolutions length',
       { ...testVideo, availableResolutions: [] },
-      videoErrorsMessages.resolutionLength,
+      VIDEO_VALIDATION_ERRORS.RESOLUTION_LENGTH,
       'availableResolutions',
       'post',
       mainRequestUrl
@@ -108,7 +109,7 @@ describe('POST request', () => {
 
     const res = await req.post(mainRequestUrl).send(postTestVideo).expect('Content-Type', /json/);
 
-    expect(res.status).toBe(201);
+    expect(res.status).toBe(HTTP_STATUS_CODES.SUCCESS_201);
     expect(res.body.canBeDownloaded).toBe(false);
     expect(res.body.minAgeRestriction).toBe(null);
   });

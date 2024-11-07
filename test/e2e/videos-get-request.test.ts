@@ -1,10 +1,11 @@
+import { HTTP_STATUS_CODES } from '../../src/types/http-status-codes';
 import { mainRequestUrl, testVideo } from './common';
 import { req } from './helper';
 
-describe('GET request', () => {
+describe('VIDEO GET request', () => {
   it('status check', async () => {
     const res = await req.get(mainRequestUrl);
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(HTTP_STATUS_CODES.SUCCESS_200);
   });
   it('response check', async () => {
     const res = await req.get(mainRequestUrl);
