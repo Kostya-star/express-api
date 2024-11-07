@@ -7,6 +7,16 @@ const getVideos = (): IVideo[] => {
   return mockDB.videos;
 };
 
+const getVideoById = (videoId: string): IVideo => {
+  const video = mockDB.videos.find((video) => video.id === +videoId);
+
+  if (!video) {
+    throw new Error(`Video with ID ${videoId} does not exist.`);
+  }
+
+  return video;
+};
+
 const createVideo = (newVideo: VideoPostPayload): IVideo => {
   const createdAt = new Date();
   const publicationDate = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000).toISOString(); // Add 1 day
@@ -54,6 +64,7 @@ const deleteVideo = (videoId: string) => {
 
 export default {
   getVideos,
+  getVideoById,
   createVideo,
   updateVideo,
   deleteVideo,

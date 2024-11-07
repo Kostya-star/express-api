@@ -4,6 +4,7 @@ import videosController from '@/controllers/videosController'
 const router = Router()
 
 router.get('/', videosController.getVideosController);
+router.get('/:id', videosController.getVideoByIdController);
 router.post('/', videosController.createVideoController);
 router.put('/:id', videosController.updateVideoController);
 router.delete('/:id', videosController.deleteVideoController);

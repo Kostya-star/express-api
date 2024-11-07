@@ -16,6 +16,18 @@ const getVideosController = (req: Request, res: Response) => {
   }
 };
 
+const getVideoByIdController = (req: Request<{ id: string }, void, void, void>, res: Response) => {
+  try {
+    const videoId = req.params.id;
+    const videos = VideoService.getVideoById(videoId);
+
+    res.status(200).json(videos);
+  } catch (err: any) {
+    console.error(err);
+    res.status(500).json(err.message);
+  }
+};
+
 const createVideoController = (req: Request<void, void, Partial<VideoPostPayload>, void>, res: Response) => {
   try {
     const { title, author, availableResolutions } = req.body;
@@ -75,6 +87,7 @@ const deleteVideoController = (req: Request<{ id: string }, void, void, void>, r
 };
 export default {
   getVideosController,
+  getVideoByIdController,
   createVideoController,
   updateVideoController,
   deleteVideoController,
