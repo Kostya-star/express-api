@@ -1,8 +1,8 @@
 import { VIDEOS_ROUTES } from '../../src/const/routes';
 import { checkVideoValidation, testVideo } from './common';
 import { req } from './helper';
-import { VIDEO_VALIDATION_ERRORS } from '../../src/types/video-validation-errors';
-import { AVAILABLE_RESOLUTIONS } from '../../src/types/video-resolutions';
+import { VIDEO_VALIDATION_ERRORS } from '../../src/types/video/video-validation-errors';
+import { AVAILABLE_RESOLUTIONS } from '../../src/types/video/video-resolutions';
 import { HTTP_STATUS_CODES } from '../../src/types/http-status-codes';
 
 const putRequestUrl = `${VIDEOS_ROUTES.main}/${testVideo.id}`;

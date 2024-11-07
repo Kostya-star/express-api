@@ -1,4 +1,4 @@
-import { MAX_AGE_RESTRICTION, MIN_AGE_RESTRICTION, VIDEO_AUTHOR_LENGTH, VIDEO_TITLE_LENGTH } from '@/const/video';
+import { MAX_AGE_RESTRICTION, MIN_AGE_RESTRICTION, VIDEO_AUTHOR_LENGTH, VIDEO_TITLE_LENGTH } from '@/const/video/video';
 
 export enum VIDEO_VALIDATION_ERRORS {
   NO_TITLE = 'Field title is not provided',

@@ -1,5 +1,5 @@
-import { IVideo } from '@/types/video';
-import { AVAILABLE_RESOLUTIONS } from '@/types/video-resolutions';
+import { IVideo } from '@/types/video/video';
+import { AVAILABLE_RESOLUTIONS } from '@/types/video/video-resolutions';
 
 interface DataBase {
   videos: IVideo[];

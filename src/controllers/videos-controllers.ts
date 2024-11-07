@@ -1,8 +1,8 @@
-import { VideoPostPayload } from '@/types/video-post-payload';
-import { postVideoValidator } from '@/validators/video/post-video-validator';
 import { NextFunction, Request, Response } from 'express';
+import { VideoPostPayload } from '@/types/video/video-post-payload';
+import { postVideoValidator } from '@/validators/video/post-video-validator';
 import VideoService from '@/services/video-service';
-import { VideoPutPayload } from '@/types/video-put-payload';
+import { VideoPutPayload } from '@/types/video/video-put-payload';
 import { putVideoValidator } from '@/validators/video/put-video-validator';
 import { HTTP_STATUS_CODES } from '@/types/http-status-codes';
 
@@ -12,7 +12,7 @@ const getVideosController = (req: Request, res: Response, next: NextFunction) =>
 
     res.status(HTTP_STATUS_CODES.SUCCESS_200).json(videos);
   } catch (err: any) {
-    next(err)
+    next(err);
   }
 };
 
@@ -23,7 +23,7 @@ const getVideoByIdController = (req: Request<{ id: string }, void, void, void>, 
 
     res.status(HTTP_STATUS_CODES.SUCCESS_200).json(video);
   } catch (err: any) {
-    next(err)
+    next(err);
   }
 };
 
@@ -45,7 +45,7 @@ const createVideoController = (req: Request<void, void, Partial<VideoPostPayload
 
     res.status(HTTP_STATUS_CODES.SUCCESS_201).json(video);
   } catch (err: any) {
-    next(err)
+    next(err);
   }
 };
 
@@ -64,9 +64,9 @@ const updateVideoController = (req: Request<{ id: string }, void, Partial<VideoP
 
     VideoService.updateVideo(videoId, payload as VideoPutPayload);
 
-    res.status(HTTP_STATUS_CODES.NO_CONTENT_204).end() 
+    res.status(HTTP_STATUS_CODES.NO_CONTENT_204).end();
   } catch (err: any) {
-    next(err)
+    next(err);
   }
 };
 
@@ -76,9 +76,9 @@ const deleteVideoController = (req: Request<{ id: string }, void, void, void>, r
 
     VideoService.deleteVideo(videoId);
 
-    res.status(HTTP_STATUS_CODES.NO_CONTENT_204).end()
+    res.status(HTTP_STATUS_CODES.NO_CONTENT_204).end();
   } catch (err: any) {
-    next(err)
+    next(err);
   }
 };
 export default {

@@ -1,7 +1,7 @@
-import { availableResolutions, MAX_AGE_RESTRICTION, MIN_AGE_RESTRICTION, VIDEO_AUTHOR_LENGTH, VIDEO_TITLE_LENGTH } from '@/const/video';
-import type { IVideo } from '@/types/video';
-import { AVAILABLE_RESOLUTIONS } from '@/types/video-resolutions';
-import { VIDEO_VALIDATION_ERRORS } from '@/types/video-validation-errors';
+import { availableResolutions, MAX_AGE_RESTRICTION, MIN_AGE_RESTRICTION, VIDEO_AUTHOR_LENGTH, VIDEO_TITLE_LENGTH } from '@/const/video/video';
+import type { IVideo } from '@/types/video/video';
+import { AVAILABLE_RESOLUTIONS } from '@/types/video/video-resolutions';
+import { VIDEO_VALIDATION_ERRORS } from '@/types/video/video-validation-errors';
 import { isIsoDate } from '@/util/isIsoDate';
 
 interface ErrorItem {

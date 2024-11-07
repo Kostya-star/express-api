@@ -1,5 +1,5 @@
 import { HTTP_STATUS_CODES } from '../../src/types/http-status-codes';
-import {VIDEO_VALIDATION_ERRORS} from '../../src/types/video-validation-errors';
+import { VIDEO_VALIDATION_ERRORS } from '../../src/types/video/video-validation-errors';
 import { checkVideoValidation, mainRequestUrl, testVideo } from './common';
 import { req } from './helper';
 
