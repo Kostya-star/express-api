@@ -3,7 +3,7 @@ import { videoErrorsMessages } from '../../src/const/video-errors-messages';
 import { IVideo } from '../../src/types/video';
 import { req } from './helper';
 
-export const postRequestUrl = VIDEOS_ROUTES.main;
+export const mainRequestUrl = VIDEOS_ROUTES.main;
 export const testVideo: IVideo = {
   author: 'Author',
   availableResolutions: ['P360'],

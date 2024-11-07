@@ -1,6 +1,6 @@
 import { VideoPostPayload } from '@/types/video-post-payload';
 import { postVideoValidator } from '@/validators/video/post-video-validator';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import VideoService from '@/services/video-service';
 import { VideoPutPayload } from '@/types/video-put-payload';
 import { putVideoValidator } from '@/validators/video/put-video-validator';
@@ -16,15 +16,14 @@ const getVideosController = (req: Request, res: Response) => {
   }
 };
 
-const getVideoByIdController = (req: Request<{ id: string }, void, void, void>, res: Response) => {
+const getVideoByIdController = async (req: Request<{ id: string }, void, void, void>, res: Response, next: NextFunction) => {
   try {
     const videoId = req.params.id;
-    const videos = VideoService.getVideoById(videoId);
+    const video = await VideoService.getVideoById(videoId);
 
-    res.status(200).json(videos);
+    res.status(200).json(video);
   } catch (err: any) {
-    console.error(err);
-    res.status(500).json(err.message);
+    next(err)
   }
 };
 

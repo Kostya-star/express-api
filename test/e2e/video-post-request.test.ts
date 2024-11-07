@@ -1,5 +1,5 @@
 import { videoErrorsMessages } from '../../src/const/video-errors-messages';
-import { checkVideoValidation, postRequestUrl, testVideo } from './common';
+import { checkVideoValidation, mainRequestUrl, testVideo } from './common';
 import { req } from './helper';
 
 describe('POST request', () => {
@@ -7,7 +7,7 @@ describe('POST request', () => {
     const { title, author, availableResolutions } = testVideo;
     const postTestVideo = { title, author, availableResolutions };
 
-    const res = await req.post(postRequestUrl).send(postTestVideo).expect('Content-Type', /json/);
+    const res = await req.post(mainRequestUrl).send(postTestVideo).expect('Content-Type', /json/);
 
     expect(res.status).toBe(201);
   });
@@ -15,7 +15,7 @@ describe('POST request', () => {
     const { title, author, availableResolutions } = testVideo;
     const postTestVideo = { title, author, availableResolutions };
 
-    const res = await req.post(postRequestUrl).send(postTestVideo);
+    const res = await req.post(mainRequestUrl).send(postTestVideo);
 
     expect(res.body).toMatchObject(postTestVideo);
   });
@@ -28,7 +28,7 @@ describe('POST request', () => {
       videoErrorsMessages.noTitle,
       'title',
       'post',
-      postRequestUrl
+      mainRequestUrl
     );
     checkVideoValidation(
       'with wrong title type',
@@ -37,7 +37,7 @@ describe('POST request', () => {
       videoErrorsMessages.titleWrongFormat,
       'title',
       'post',
-      postRequestUrl
+      mainRequestUrl
     );
     checkVideoValidation(
       'with exceeded title length',
@@ -45,7 +45,7 @@ describe('POST request', () => {
       videoErrorsMessages.titleLength,
       'title',
       'post',
-      postRequestUrl
+      mainRequestUrl
     );
 
     checkVideoValidation(
@@ -55,7 +55,7 @@ describe('POST request', () => {
       videoErrorsMessages.noAuthor,
       'author',
       'post',
-      postRequestUrl
+      mainRequestUrl
     );
     checkVideoValidation(
       'with wrong author type',
@@ -64,7 +64,7 @@ describe('POST request', () => {
       videoErrorsMessages.authorWrongFormat,
       'author',
       'post',
-      postRequestUrl
+      mainRequestUrl
     );
     checkVideoValidation(
       'with exceeded author length',
@@ -72,7 +72,7 @@ describe('POST request', () => {
       videoErrorsMessages.authorLength,
       'author',
       'post',
-      postRequestUrl
+      mainRequestUrl
     );
     checkVideoValidation(
       'with missing availableResolutions',
@@ -81,7 +81,7 @@ describe('POST request', () => {
       videoErrorsMessages.noResolution,
       'availableResolutions',
       'post',
-      postRequestUrl
+      mainRequestUrl
     );
     checkVideoValidation(
       'with wrong availableResolutions type',
@@ -90,7 +90,7 @@ describe('POST request', () => {
       videoErrorsMessages.resolutionWrongFormat,
       'availableResolutions',
       'post',
-      postRequestUrl
+      mainRequestUrl
     );
     checkVideoValidation(
       'with wrong availableResolutions length',
@@ -98,7 +98,7 @@ describe('POST request', () => {
       videoErrorsMessages.resolutionLength,
       'availableResolutions',
       'post',
-      postRequestUrl
+      mainRequestUrl
     );
   });
 
@@ -106,7 +106,7 @@ describe('POST request', () => {
     const { title, author, availableResolutions } = testVideo;
     const postTestVideo = { title, author, availableResolutions };
 
-    const res = await req.post(postRequestUrl).send(postTestVideo).expect('Content-Type', /json/);
+    const res = await req.post(mainRequestUrl).send(postTestVideo).expect('Content-Type', /json/);
 
     expect(res.status).toBe(201);
     expect(res.body.canBeDownloaded).toBe(false);

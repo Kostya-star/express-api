@@ -2,20 +2,41 @@ import { mockDB } from '@/mockDB';
 import { IVideo } from '@/types/video';
 import { VideoPostPayload } from '@/types/video-post-payload';
 import { VideoPutPayload } from '@/types/video-put-payload';
+import { ErrorService } from './error-service';
 
 const getVideos = (): IVideo[] => {
   return mockDB.videos;
 };
 
-const getVideoById = (videoId: string): IVideo => {
-  const video = mockDB.videos.find((video) => video.id === +videoId);
-
-  if (!video) {
-    throw new Error(`Video with ID ${videoId} does not exist.`);
-  }
-
-  return video;
+const asyncHandler = <T>(cb: () => Promise<T>): Promise<T> => {
+  return Promise.resolve(cb()).catch((err) => {
+    throw err;
+  });
 };
+
+
+const getVideoById = (videoId: string): Promise<IVideo> =>
+  asyncHandler(async () => {
+    const video = mockDB.videos.find((video) => video.id === +videoId);
+
+    if (!video) {
+      throw new ErrorService(`Video with ID ${videoId} does not exist.`, 404);
+    }
+
+    return video;
+  });
+
+// const getVideoById = (videoId: string): Promise<IVideo> => {
+//   return new Promise((resolve, reject) => {
+//     const video = mockDB.videos.find((video) => video.id === +videoId);
+
+//     if (!video) {
+//       return reject(new ErrorService(`Video with ID ${videoId} does not exist.`, 404));
+//     }
+
+//     resolve(video);
+//   });
+// };
 
 const createVideo = (newVideo: VideoPostPayload): IVideo => {
   const createdAt = new Date();
@@ -59,7 +80,7 @@ const deleteVideo = (videoId: string) => {
     throw new Error(`Video with ID ${videoId} does not exist.`);
   }
 
-  mockDB.videos = mockDB.videos.filter(video => video.id !== videoToDelete.id) 
+  mockDB.videos = mockDB.videos.filter((video) => video.id !== videoToDelete.id);
 };
 
 export default {
