@@ -70,16 +70,6 @@ const updateVideoById = (req: Request<{ id: string }, void, Partial<VideoPutPayl
   }
 };
 
-const deleteAllVideos = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    VideoService.deleteAllVideos();
-
-    res.status(HTTP_STATUS_CODES.NO_CONTENT_204).end();
-  } catch (err: any) {
-    next(err);
-  }
-};
-
 const deleteVideoById = (req: Request<{ id: string }, void, void, void>, res: Response, next: NextFunction) => {
   try {
     const videoId = req.params.id;
@@ -97,6 +87,5 @@ export default {
   getVideoById,
   createVideo,
   updateVideoById,
-  deleteAllVideos,
   deleteVideoById,
 };

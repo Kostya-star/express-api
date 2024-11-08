@@ -66,15 +66,10 @@ const deleteVideo = (videoId: string) => {
   mockDB.videos = mockDB.videos.filter((video) => video.id !== videoToDelete.id);
 };
 
-const deleteAllVideos = () => {
-  mockDB.videos = [];
-};
-
 export default {
   getAllVideos,
   getVideoById,
   createVideo,
   updateVideo,
-  deleteAllVideos,
   deleteVideo,
 };

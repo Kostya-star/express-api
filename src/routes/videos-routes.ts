@@ -7,5 +7,4 @@ videoRoutes.get('/', videosController.getAllVideos);
 videoRoutes.get('/:id', videosController.getVideoById);
 videoRoutes.post('/', videosController.createVideo);
 videoRoutes.put('/:id', videosController.updateVideoById);
-videoRoutes.delete('/', videosController.deleteAllVideos);
 videoRoutes.delete('/:id', videosController.deleteVideoById);
