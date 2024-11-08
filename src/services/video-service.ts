@@ -6,7 +6,7 @@ import { HttpErrorService } from './error-service';
 import { HTTP_ERROR_RESPONSES } from '@/types/http-error-responses';
 import { HTTP_STATUS_CODES } from '@/types/http-status-codes';
 
-const getVideos = (): IVideo[] => {
+const getAllVideos = (): IVideo[] => {
   return mockDB.videos;
 };
 
@@ -66,10 +66,15 @@ const deleteVideo = (videoId: string) => {
   mockDB.videos = mockDB.videos.filter((video) => video.id !== videoToDelete.id);
 };
 
+const deleteAllVideos = () => {
+  mockDB.videos = [];
+};
+
 export default {
-  getVideos,
+  getAllVideos,
   getVideoById,
   createVideo,
   updateVideo,
+  deleteAllVideos,
   deleteVideo,
 };

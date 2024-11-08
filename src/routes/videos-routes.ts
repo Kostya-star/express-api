@@ -3,8 +3,9 @@ import videosController from '@/controllers/videos-controllers'
 
 export const videoRoutes = Router()
 
-videoRoutes.get('/', videosController.getVideosController);
-videoRoutes.get('/:id', videosController.getVideoByIdController);
-videoRoutes.post('/', videosController.createVideoController);
-videoRoutes.put('/:id', videosController.updateVideoController);
-videoRoutes.delete('/:id', videosController.deleteVideoController);
+videoRoutes.get('/', videosController.getAllVideos);
+videoRoutes.get('/:id', videosController.getVideoById);
+videoRoutes.post('/', videosController.createVideo);
+videoRoutes.put('/:id', videosController.updateVideoById);
+videoRoutes.delete('/', videosController.deleteAllVideos);
+videoRoutes.delete('/:id', videosController.deleteVideoById);

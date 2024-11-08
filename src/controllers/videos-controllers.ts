@@ -6,9 +6,9 @@ import { VideoPutPayload } from '@/types/video/video-put-payload';
 import { putVideoValidator } from '@/validators/video/put-video-validator';
 import { HTTP_STATUS_CODES } from '@/types/http-status-codes';
 
-const getVideosController = (req: Request, res: Response, next: NextFunction) => {
+const getAllVideos = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const videos = VideoService.getVideos();
+    const videos = VideoService.getAllVideos();
 
     res.status(HTTP_STATUS_CODES.SUCCESS_200).json(videos);
   } catch (err: any) {
@@ -16,7 +16,7 @@ const getVideosController = (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-const getVideoByIdController = (req: Request<{ id: string }, void, void, void>, res: Response, next: NextFunction) => {
+const getVideoById = (req: Request<{ id: string }, void, void, void>, res: Response, next: NextFunction) => {
   try {
     const videoId = req.params.id;
     const video = VideoService.getVideoById(videoId);
@@ -27,7 +27,7 @@ const getVideoByIdController = (req: Request<{ id: string }, void, void, void>, 
   }
 };
 
-const createVideoController = (req: Request<void, void, Partial<VideoPostPayload>, void>, res: Response, next: NextFunction) => {
+const createVideo = (req: Request<void, void, Partial<VideoPostPayload>, void>, res: Response, next: NextFunction) => {
   try {
     const { title, author, availableResolutions } = req.body;
 
@@ -49,7 +49,7 @@ const createVideoController = (req: Request<void, void, Partial<VideoPostPayload
   }
 };
 
-const updateVideoController = (req: Request<{ id: string }, void, Partial<VideoPutPayload>, void>, res: Response, next: NextFunction) => {
+const updateVideoById = (req: Request<{ id: string }, void, Partial<VideoPutPayload>, void>, res: Response, next: NextFunction) => {
   try {
     const videoId = req.params.id;
     const payload = req.body;
@@ -70,7 +70,17 @@ const updateVideoController = (req: Request<{ id: string }, void, Partial<VideoP
   }
 };
 
-const deleteVideoController = (req: Request<{ id: string }, void, void, void>, res: Response, next: NextFunction) => {
+const deleteAllVideos = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    VideoService.deleteAllVideos();
+
+    res.status(HTTP_STATUS_CODES.NO_CONTENT_204).end();
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+const deleteVideoById = (req: Request<{ id: string }, void, void, void>, res: Response, next: NextFunction) => {
   try {
     const videoId = req.params.id;
 
@@ -81,10 +91,12 @@ const deleteVideoController = (req: Request<{ id: string }, void, void, void>, r
     next(err);
   }
 };
+
 export default {
-  getVideosController,
-  getVideoByIdController,
-  createVideoController,
-  updateVideoController,
-  deleteVideoController,
+  getAllVideos,
+  getVideoById,
+  createVideo,
+  updateVideoById,
+  deleteAllVideos,
+  deleteVideoById,
 };
