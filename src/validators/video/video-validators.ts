@@ -42,7 +42,7 @@ export function validateResolutions(resolutions: AVAILABLE_RESOLUTIONS[] | undef
     pushError('availableResolutions', VIDEO_VALIDATION_ERRORS.NO_RESOLUTION, errors);
   } else if (!Array.isArray(resolutions)) {
     pushError('availableResolutions', VIDEO_VALIDATION_ERRORS.RESOLUTION_WRONG_FORMAT, errors);
-  } else if (!availableResolutions.filter((r) => resolutions.some((res) => res === r)).length) {
+  } else if (!resolutions.length || !resolutions.some(r => availableResolutions.includes(r))) {
     pushError('availableResolutions', VIDEO_VALIDATION_ERRORS.RESOLUTION_LENGTH, errors);
   }
 }
