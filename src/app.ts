@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-// import cors from 'cors';
+import cors from 'cors';
 
 // use alias
 import 'module-alias/register';
@@ -12,7 +12,7 @@ import { HTTP_STATUS_CODES } from './types/http-status-codes';
 
 export const app = express();
 
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
 
 app.use(VIDEOS_ROUTES.main, videoRoutes);
